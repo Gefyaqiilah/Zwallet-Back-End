@@ -1,0 +1,34 @@
+{
+  "name": "zwallet-backend",
+  "version": "1.0.0",
+  "description": "zwallet dengan berisi backend ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "author": "Gefy Aqiilah Aqshal",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "http-errors": "^1.8.0",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "mysql": "^2.18.1",
+    "node-mailer": "^0.1.1",
+    "redis": "^3.0.2",
+    "util": "^0.12.3",
+    "uuidv4": "^6.2.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6",
+    "standard": "^16.0.3"
+  }
+}
