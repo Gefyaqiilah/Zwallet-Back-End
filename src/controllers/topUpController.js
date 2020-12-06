@@ -6,7 +6,7 @@ const topUpModel = require('../models/topUpModel')
 const responseHelpers = require('../helpers/responseHelpers')
 
 class Controller {
-  getTopUp(req, res) {
+  getTopUp(req, res, next) {
     const {
       page = 1, limit = 2, order = "DESC"
     } = req.query
@@ -26,7 +26,7 @@ class Controller {
       })
   }
 
-  getTopUpById(req, res) {
+  getTopUpById(req, res, next) {
     const idTopUp = req.params.idTopUp
     topUpModel.getTopUpById(idTopUp)
       .then(results => {
@@ -70,7 +70,7 @@ class Controller {
       })
   }
 
-  insertTopUp(req, res) {
+  insertTopUp(req, res, next) {
     const {
       idReceiver,
       senderName = '',
@@ -99,7 +99,7 @@ class Controller {
       })
   }
 
-  deleteTopUp(req, res) {
+  deleteTopUp(req, res, next) {
     const idTopUp = req.params.idTopUp
     topUpModel.deleteTopUp(idTopUp)
       .then(results => {

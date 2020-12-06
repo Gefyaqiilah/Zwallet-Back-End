@@ -258,7 +258,7 @@ class Controllers {
     })
   }
 
-  insertUsers(req, res) {
+  insertUsers(req, res, next) {
     const {
       firstName,
       lastName,
@@ -338,7 +338,7 @@ class Controllers {
     })
   }
 
-  updatePhoneNumber(req, res) {
+  updatePhoneNumber(req, res, next) {
     const {
       phoneNumber = null
     } = req.body
@@ -451,7 +451,7 @@ class Controllers {
       })
   }
 
-  deleteUsers(req, res) {
+  deleteUsers(req, res, next) {
     const idUser = req.params.idUser
     usersModel.deleteUsers(idUser)
       .then(results => {

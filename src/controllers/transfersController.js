@@ -6,7 +6,7 @@ const transfersModel = require('../models/transfersModel')
 const responseHelpers = require('../helpers/responseHelpers')
 
 class Controller {
-  getTransfers(req, res) {
+  getTransfers(req, res,next) {
     const {
       page = 1, limit = 2, order = "DESC"
     } = req.query
@@ -46,7 +46,7 @@ class Controller {
       })
   }
 
-  insertTransfers(req, res) {
+  insertTransfers(req, res,next) {
     const {
       idSender,
       idReceiver,
@@ -129,7 +129,7 @@ class Controller {
     }
   }
 
-  deleteTransfers(req, res) {
+  deleteTransfers(req, res, next) {
     const idTransfer = req.params.idTransfer
     transfersModel.deleteTransfers(idTransfer)
       .then(results => {
