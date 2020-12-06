@@ -35,7 +35,7 @@ router
   .post('/logout', authenticateToken, userLogOut)
   .patch('/:idUser', authenticateToken, authorizationUser, updateUsers)
   .post('/photo', uploadMulter.single('photo'),insertPhoto)
-  .patch('/photo/:idUser', uploadMulter.single('photo'), updatePhoto)
+  .post('/photo/:idUser', uploadMulter.single('photo'), updatePhoto)
   .delete('/:idUser', authenticateToken, authorizationAdmin, deleteUsers)
 
 module.exports = router
