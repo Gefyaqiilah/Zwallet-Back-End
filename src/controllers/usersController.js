@@ -398,7 +398,7 @@ class Controllers {
       const oldImage = dataResults.photo
       // check wether the previous user has uploaded photo 
       if(oldImage){
-        const replaceString = oldImage.replace('http://localhost:3000/photo/','')
+        const replaceString = oldImage.replace(`${process.env.BASE_URL}/photo/`,'')
         fs.unlink(`./uploads/${replaceString}`, err=>{
          if(err){
            const error = new createError(500, 'Failed to delete old photos') 
