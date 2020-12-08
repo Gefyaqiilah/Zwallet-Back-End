@@ -29,7 +29,6 @@ class Controller {
 
   emailVerification(req,res,next){
     const email = req.body.email
-    console.log(req.body)
     if(!email){
       const error = new createError(400,'email cannot empty')
       return next(error)

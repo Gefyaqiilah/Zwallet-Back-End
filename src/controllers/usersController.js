@@ -396,7 +396,6 @@ class Controllers {
       const dataResults = results[0]
 
       const oldImage = dataResults.photo
-      // check wether the previous user has uploaded photo 
       if(oldImage){
         const replaceString = oldImage.replace(`${process.env.BASE_URL}/photo/`,'')
         fs.unlink(`./uploads/${replaceString}`, err=>{
@@ -406,7 +405,7 @@ class Controllers {
          }
         })
       }
-      // if the user hasn't uploaded a photo before,program will skip and go down here
+
       usersModel.updatePhoto(id, photo)
       .then(results => {
         responseHelpers.response(res, results, {
