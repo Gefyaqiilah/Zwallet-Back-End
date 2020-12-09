@@ -12,7 +12,7 @@ const sendEmail = require('../helpers/sendEmail')
 
 const {
   getUsers,
-  getUsersByNameAndPhoneNumber,
+  getUsersByFirstName,
   updatePhoto,
   getUsersById,
   insertUsers,
@@ -28,7 +28,7 @@ const {
 router
   .get('/', getUsers)
   .post('/register', sendEmailVerification, insertUsers)
-  .get('/search', getUsersByNameAndPhoneNumber)
+  .get('/search', getUsersByFirstName)
   .post('/login', userLogin)
   .post('/photo', uploadMulter.single('photo'), insertPhoto)
   .patch('/photo/:idUser', authenticateToken, authorizationUser, uploadMulter.single('photo'), updatePhoto)

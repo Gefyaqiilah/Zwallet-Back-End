@@ -10,6 +10,9 @@ const responseHelpers = require('../helpers/responseHelpers')
 const usersModel = require('../models/usersModel');
 const fs = require('fs')
 const sendEmail = require('../helpers/sendEmail')
+const { pagination } = require('../helpers/pagination')
+
+
 class Controllers {
   constructor() {
     this.userLogin = this.userLogin.bind(this)
@@ -19,15 +22,21 @@ class Controllers {
     this.userLogOut = this.userLogOut.bind(this)
   }
 
-  getUsers(req, res, next) {
+  async getUsers(req, res, next) {
     const {
       page = 1, limit = 4, order = "ASC"
     } = req.query
     const offset = page ? (parseInt(page) - 1) * parseInt(limit) : 0
 
+    const setPagination = await pagination(limit, page, "users", "users")
+
     usersModel.getUsers(limit, offset, order)
       .then(results => {
-        responseHelpers.response(res, results, {
+        const resultUsers = {
+          pagination: setPagination,
+          users: results
+        }
+        responseHelpers.response(res, resultUsers, {
           status: 'succeed',
           statusCode: 200
         }, null)
@@ -59,27 +68,40 @@ class Controllers {
       })
   }
 
-  getUsersByNameAndPhoneNumber(req, res, next) {
+  getUsersByFirstName(req, res, next) {
     const {
-      firstName = '', phoneNumber = ''
+      firstName = ""
     } = req.query
-
-    usersModel.getUsersByNameAndPhoneNumber(firstName, phoneNumber)
-      .then(results => {
-        if (results.length === 0) {
-          const error = new createError(404, `User not Found..`)
+    if (!firstName) {
+      const error = new createError(404, `Firstname cannot empty`)
+      return next(error)
+    }
+    // set redis
+    client.get(`searchUser=${firstName}`, function (err, reply) {
+      if (err) {
+        responseHelpers.response(res, JSON.parse(reply), {
+          status: 'succeed',
+          statusCode: 200
+        }, null)
+      }
+      usersModel.getUsersByFirstName(firstName)
+        .then(results => {
+          if (results.length === 0) {
+            const error = new createError(404, `User not Found..`)
+            return next(error)
+          } else {
+            client.setex(`searchUser=${firstName}`, 60 * 60, JSON.stringify(results));
+            responseHelpers.response(res, results, {
+              status: 'succeed',
+              statusCode: 200
+            }, null)
+          }
+        })
+        .catch(() => {
+          const error = new createError(500, `Looks like server having trouble`)
           return next(error)
-        } else {
-          responseHelpers.response(res, results, {
-            status: 'succeed',
-            statusCode: 200
-          }, null)
-        }
-      })
-      .catch(() => {
-        const error = new createError(500, `Looks like server having trouble`)
-        return next(error)
-      })
+        })
+    })
   }
 
   userLogin(req, res, next) {
@@ -104,7 +126,8 @@ class Controllers {
                   lastName: userData.lastName,
                   email: userData.email,
                   phoneNumber: userData.phoneNumber,
-                  balance: userData.balance
+                  balance: userData.balance,
+                  photo: userData.photo
                 }
                 // function for generate token
                 const token = this.generateAccessToken(userDataToken)

@@ -11,7 +11,17 @@ class Models {
       })
     })
   }
-
+  countUsers(table) {
+    return new Promise((resolve, reject) => {
+      connection.query(`SELECT COUNT(*) as totalData FROM ${table}`, (error, results) => {
+        if (!error) {
+          resolve(results)
+        } else {
+          reject(error)
+        }
+      })
+    })
+  }
   getUsersById(id) {
     return new Promise((resolve, reject) => {
       connection.query('SELECT id, firstName, lastName, email, phoneNumber, photo FROM users WHERE id = ?', id, (error, results) => {
@@ -24,9 +34,9 @@ class Models {
     })
   }
 
-  getUsersByNameAndPhoneNumber(firstName, phoneNumber) {
+  getUsersByFirstName(firstName) {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT id, firstName, lastName, phoneNumber, email, photo FROM users WHERE firstName LIKE ? AND phoneNumber LIKE ?', [`%${firstName}%`, `%${phoneNumber}%`], (error, results) => {
+      connection.query('SELECT id, firstName, lastName, phoneNumber, email, photo FROM users WHERE firstName LIKE ?', [`%${firstName}%`], (error, results) => {
         if (!error) {
           resolve(results)
         } else {
@@ -93,7 +103,7 @@ class Models {
   }
   userLogin(email) {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT id, email, firstName, lastName, phoneNumber, password, balance from users WHERE email = ?', email, ((error, results) => {
+      connection.query('SELECT id, email, firstName, lastName, phoneNumber, password, balance, photo from users WHERE email = ?', email, ((error, results) => {
         if (!error) {
           resolve(results)
         } else {

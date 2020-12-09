@@ -4,18 +4,23 @@ const {
 const createError = require('http-errors')
 const topUpModel = require('../models/topUpModel')
 const responseHelpers = require('../helpers/responseHelpers')
+const { pagination } = require('../helpers/pagination')
 
 class Controller {
-  getTopUp(req, res, next) {
+  async getTopUp(req, res, next) {
     const {
       page = 1, limit = 2, order = "DESC"
     } = req.query
     const ordered = order.toUpperCase()
     const offset = page ? (parseInt(page) - 1) * parseInt(limit) : 0;
-
+    const setPagination = await pagination(limit, page, "topup", "topup")
     topUpModel.getTopUp(limit, offset, ordered)
       .then(results => {
-        responseHelpers.response(res, results, {
+        const resultTopUp = {
+          pagination: setPagination,
+          topup: results
+        }
+        responseHelpers.response(res, resultTopUp, {
           status: 'succeed',
           statusCode: 200
         }, null)

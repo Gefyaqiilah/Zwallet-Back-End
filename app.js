@@ -24,12 +24,12 @@ app.use(bodyParser.json())
 app.use(morgan('dev'))
 
 // grouping end-point
-app.use('/users', usersRoute)
-app.use('/transfers', transfersRoute)
-app.use('/topup', topUpRoute)
-app.use('/email',emailRoute)
+app.use('/v1/users', usersRoute)
+app.use('/v1/transfers', transfersRoute)
+app.use('/v1/topup', topUpRoute)
+app.use('/v1/email', emailRoute)
 
-app.use('/photo',express.static('./uploads'))
+app.use('/photo', express.static('./uploads'))
 
 app.use('*', (req, res) => {
   responseHelpers.response(res, null, { status: 'failed', statusCode: 404 }, { message: 'Sorry API endpoint Not Found' })

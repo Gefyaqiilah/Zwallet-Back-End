@@ -1,21 +1,26 @@
 const {
   v4: uuidv4
 } = require('uuid')
+const { pagination } = require('../helpers/pagination')
 const createError = require('http-errors')
 const transfersModel = require('../models/transfersModel')
 const responseHelpers = require('../helpers/responseHelpers')
 
 class Controller {
-  getTransfers(req, res, next) {
+  async getTransfers(req, res, next) {
     const {
       page = 1, limit = 2, order = "DESC"
     } = req.query
     const ordered = order.toUpperCase()
     const offset = page ? (parseInt(page) - 1) * parseInt(limit) : 0;
-
+    const setPagination = await pagination(limit, page, "transfers", "transfers")
     transfersModel.getTransfers(limit, offset, ordered)
       .then(results => {
-        responseHelpers.response(res, results, {
+        const resultTransfers = {
+          pagination: setPagination,
+          transfers: results
+        }
+        responseHelpers.response(res, resultTransfers, {
           status: 'succeed',
           statusCode: 200
         }, null)
