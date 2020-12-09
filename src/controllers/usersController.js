@@ -126,6 +126,7 @@ class Controllers {
                   lastName: userData.lastName,
                   email: userData.email,
                   phoneNumber: userData.phoneNumber,
+                  phoneNumberSecond: userData.phoneNumberSecond,
                   balance: userData.balance,
                   photo: userData.photo
                 }
@@ -463,7 +464,7 @@ class Controllers {
       ...req.body,
       updatedAt: new Date()
     }
-
+    console.log(data)
     usersModel.updateUsers(idUser, data)
       .then(() => {
         const results = { message: "user data has been successfully updated" }
