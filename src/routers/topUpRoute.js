@@ -13,8 +13,8 @@ const {
 } = topUpController
 router
   .get('/', getTopUp)
-  .get('/search', getTopUpByFirstName)
-  .get('/:idTopUp', getTopUpById)
-  .delete('/:idTopUp', deleteTopUp)
-  .post('/', insertTopUp)
+  .delete('/:idTopUp', authenticateToken, authorizationUser, deleteTopUp)
+  .get('/search', authenticateToken, authorizationUser, getTopUpByFirstName)
+  .get('/:idTopUp', authenticateToken, authorizationAdmin, getTopUpById)
+  .post('/', authenticateToken, authorizationAdmin, insertTopUp)
 module.exports = router

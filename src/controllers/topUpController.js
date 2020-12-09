@@ -87,7 +87,8 @@ class Controller {
       topUpDate: new Date()
     }
     topUpModel.insertTopUp(data)
-      .then(results => {
+      .then(() => {
+        const results = { message: "Topup successfully" }
         responseHelpers.response(res, results, {
           status: 'succeed',
           statusCode: 200
@@ -102,7 +103,8 @@ class Controller {
   deleteTopUp(req, res, next) {
     const idTopUp = req.params.idTopUp
     topUpModel.deleteTopUp(idTopUp)
-      .then(results => {
+      .then(() => {
+        const results = { message: "Topup has been successfully deleted" }
         responseHelpers.response(res, results, {
           status: 'succeed',
           statusCode: 200

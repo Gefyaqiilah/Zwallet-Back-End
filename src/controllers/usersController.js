@@ -43,9 +43,8 @@ class Controllers {
 
     usersModel.getUsersById(idUser)
       .then(results => {
-        console.log(results)
         if (results.length === 0) {
-          const error = new createError(404, `User with number ID:${idUser} not Found..`)
+          const error = new createError(404, `User not Found..`)
           next(error)
         } else {
           responseHelpers.response(res, results, {
@@ -64,11 +63,11 @@ class Controllers {
     const {
       firstName = '', phoneNumber = ''
     } = req.query
-    
+
     usersModel.getUsersByNameAndPhoneNumber(firstName, phoneNumber)
       .then(results => {
         if (results.length === 0) {
-          const error = new createError(404, `User with firstname : ${firstName} and phoneNumber : ${phoneNumber} not Found..`)
+          const error = new createError(404, `User not Found..`)
           return next(error)
         } else {
           responseHelpers.response(res, results, {
@@ -82,7 +81,7 @@ class Controllers {
         return next(error)
       })
   }
-  
+
   userLogin(req, res, next) {
     const {
       email,
@@ -125,8 +124,8 @@ class Controllers {
                     })
                     if (checkLoggedin) {
                       tokenResponse = {
-                        accessToken:token,
-                        refreshToken:checkLoggedin.refreshToken
+                        accessToken: token,
+                        refreshToken: checkLoggedin.refreshToken
                       }
                       return responseHelpers.response(res, tokenResponse, {
                         status: 'Login Successful',
@@ -178,7 +177,7 @@ class Controllers {
   userLogOut(req, res, next) {
     client.get("dataLogin", function (err, reply) {
       if (!reply) {
-        const error = new createError(401, `Forbidden`)
+        const error = new createError(401, 'Cannot save data login on redis')
         return next(error)
       }
 
@@ -186,7 +185,7 @@ class Controllers {
 
       const checkDataLogin = dataLogin.find((user) => user.email === req.user.email)
       if (!checkDataLogin) {
-        const error = new createError(401, `Forbidden`)
+        const error = new createError(401, `Forbidden: required to log in first`)
         return next(error)
       }
 
@@ -205,8 +204,8 @@ class Controllers {
     return jwt.sign(
       userData,
       process.env.ACCESS_TOKEN, {
-        expiresIn: '24h'
-      })
+      expiresIn: '24h'
+    })
   }
 
   generateRefreshToken(userData) {
@@ -216,18 +215,18 @@ class Controllers {
   newToken(req, res, next) {
     const refreshToken = req.body.token
     if (!refreshToken) {
-      const error = new createError(500, `Forbidden: tokens cannot be empty`)
+      const error = new createError(500, `Forbidden: Token cannot be empty`)
       return next(error)
     }
-    
+
     client.get("dataLogin", function (err, reply) {
       if (!reply) {
         const error = new createError(401, `Forbidden: required to log in first`)
         return next(error)
       }
-      
+
       const dataLogin = [...JSON.parse(reply)]
-      
+
       const checkRefreshToken = dataLogin.find((x) => {
         return x.refreshToken === refreshToken
       })
@@ -235,14 +234,14 @@ class Controllers {
         const error = new createError(401, `Forbidden: you are not logged in`)
         return next(error)
       }
-      
+
       const verifyRefreshToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN)
-      
+
       usersModel.getDataToken(verifyRefreshToken.email)
-      .then(results => {
-        const userData = JSON.stringify(results[0])
-        jwt.sign(userData, process.env.ACCESS_TOKEN, function (err, token) {
-          return responseHelpers.response(res, {
+        .then(results => {
+          const userData = JSON.stringify(results[0])
+          jwt.sign(userData, process.env.ACCESS_TOKEN, function (err, token) {
+            return responseHelpers.response(res, {
               accessToken: token
             }, {
               status: 'Succeed',
@@ -251,7 +250,6 @@ class Controllers {
           });
         })
         .catch(() => {
-          console.log('masuk ke catch')
           const error = new createError(500, `Looks like server having trouble`)
           return next(error)
         })
@@ -320,22 +318,22 @@ class Controllers {
     })
   }
 
-  sendEmailVerification (req,res,next) {
+  sendEmailVerification(req, res, next) {
     const email = req.body.email
     const name = req.body.firstName
-    if(!email||!name){
-      const error = new createError(404, 'Forbidden: message and email cannot be empty')
+    if (!email || !name) {
+      const error = new createError(404, 'Forbidden: message or email cannot be empty')
       return next(error)
     }
 
-    sendEmail(email,name)
-    .then(()=>{
-      return next()
-    })
-    .catch(()=>{
-      const error = new createError(500,'Looks like server having trouble..')
-      return next(error)
-    })
+    sendEmail(email, name)
+      .then(() => {
+        return next()
+      })
+      .catch(() => {
+        const error = new createError(500, 'Looks like server having trouble..')
+        return next(error)
+      })
   }
 
   updatePhoneNumber(req, res, next) {
@@ -349,7 +347,8 @@ class Controllers {
     }
 
     usersModel.updatePhoneNumber(id, phoneNumber)
-      .then(results => {
+      .then(() => {
+        const results = { message: "user phone number has been successfully updated" }
         responseHelpers.response(res, results, {
           status: 'Succeed',
           statusCode: 200
@@ -360,54 +359,15 @@ class Controllers {
         return next(error)
       })
   }
-  insertPhoto(req,res,next){
+  insertPhoto(req, res, next) {
     if (!req.file.filename) {
       const error = new createError(400, `Forbidden: Id or Photo cannot be empty`)
       return next(error)
     }
     const photo = `${process.env.BASE_URL}/photo/${req.file.filename}`
     usersModel.insertPhoto(photo)
-    .then(results => {
-      responseHelpers.response(res, results, {
-        status: 'succeed',
-        statusCode: 200
-      }, null)
-    })
-    .catch(() => {
-      const error = new createError(500, `Looks like server having trouble`)
-      return next(error)
-    })
-  }
-
-  updatePhoto(req, res,next) {
-    const id = req.params.idUser
-    if (!id || !req.file.filename) {
-      const error = new createError(400, `Forbidden: Id or Photo cannot be empty`)
-      return next(error)
-    }
-    const photo = `${process.env.BASE_URL}/photo/${req.file.filename}`
-
-    usersModel.getUsersById(id)
-    .then(async results=>{
-      if(results.length===0){
-        const error = new createError(404, `ID Not Found`)
-        return next(error)
-      } 
-      const dataResults = results[0]
-
-      const oldImage = dataResults.photo
-      if(oldImage){
-        const replaceString = oldImage.replace(`${process.env.BASE_URL}/photo/`,'')
-        fs.unlink(`./uploads/${replaceString}`, err=>{
-         if(err){
-           const error = new createError(500, 'Failed to delete old photos') 
-           return next(error)
-         }
-        })
-      }
-
-      usersModel.updatePhoto(id, photo)
-      .then(results => {
+      .then(() => {
+        const results = { message: "user photo has been successfully added" }
         responseHelpers.response(res, results, {
           status: 'succeed',
           statusCode: 200
@@ -417,12 +377,52 @@ class Controllers {
         const error = new createError(500, `Looks like server having trouble`)
         return next(error)
       })
+  }
 
-    })
-    .catch(()=>{
-      const error = new createError(500, `Looks like server having trouble`)
+  updatePhoto(req, res, next) {
+    const id = req.params.idUser
+    if (!id || !req.file.filename) {
+      const error = new createError(400, `Forbidden: Id or Photo cannot be empty`)
       return next(error)
-    })
+    }
+    const photo = `${process.env.BASE_URL}/photo/${req.file.filename}`
+    usersModel.getUsersById(id)
+      .then(async results => {
+        if (results.length === 0) {
+          const error = new createError(404, `ID Not Found`)
+          return next(error)
+        }
+        const dataResults = results[0]
+
+        const oldImage = dataResults.photo
+        if (oldImage) {
+          const replaceString = oldImage.replace(`${process.env.BASE_URL}/photo/`, '')
+          fs.unlink(`./uploads/${replaceString}`, err => {
+            if (err) {
+              const error = new createError(500, 'Failed to delete old photos')
+              return next(error)
+            }
+          })
+        }
+
+        usersModel.updatePhoto(id, photo)
+          .then(() => {
+            const results = { message: "user photo has been successfully updated" }
+            responseHelpers.response(res, results, {
+              status: 'succeed',
+              statusCode: 200
+            }, null)
+          })
+          .catch(() => {
+            const error = new createError(500, `Looks like server having trouble`)
+            return next(error)
+          })
+
+      })
+      .catch(() => {
+        const error = new createError(500, `Looks like server having trouble`)
+        return next(error)
+      })
 
   }
   updateUsers(req, res, next) {
@@ -432,13 +432,18 @@ class Controllers {
       return next(error)
     }
 
+    if (req.body.id || req.body.roleId || req.body.emailStatus || req.body.balance) {
+      const error = new createError(400, `Forbidden: Cannot change id, roleId, emailStatus and balance`)
+      return next(error)
+    }
     const data = {
       ...req.body,
       updatedAt: new Date()
     }
 
     usersModel.updateUsers(idUser, data)
-      .then(results => {
+      .then(() => {
+        const results = { message: "user data has been successfully updated" }
         responseHelpers.response(res, results, {
           status: 'succeed',
           statusCode: 200
@@ -453,17 +458,16 @@ class Controllers {
   deleteUsers(req, res, next) {
     const idUser = req.params.idUser
     usersModel.deleteUsers(idUser)
-      .then(results => {
+      .then(() => {
+        const results = { message: "user has been successfully deleted" }
         responseHelpers.response(res, results, {
           status: 'succeed',
           statusCode: 200
         }, null)
       })
-      .catch(error => {
-        responseHelpers.response(res, null, {
-          status: 'failed',
-          statusCode: 500
-        }, error)
+      .catch(() => {
+        const error = new createError(500, `Looks like server having trouble`)
+        return next(error)
       })
   }
 }

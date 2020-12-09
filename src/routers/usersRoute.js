@@ -7,7 +7,7 @@ const authenticateToken = require('../middleware/authenticateToken')
 const authorizationAdmin = require('../middleware/authorizationAdmin')
 const authorizationUser = require('../middleware/authorizationUser')
 const authorizationGeneral = require('../middleware/authorizationGeneral')
-const {uploadMulter} = require('../middleware/uploadImage')
+const { uploadMulter } = require('../middleware/uploadImage')
 const sendEmail = require('../helpers/sendEmail')
 
 const {
@@ -27,15 +27,15 @@ const {
 
 router
   .get('/', getUsers)
+  .post('/register', sendEmailVerification, insertUsers)
   .get('/search', getUsersByNameAndPhoneNumber)
-  .post('/token', authorizationGeneral , newToken)
-  .get('/:idUser', authenticateToken, authorizationUser, getUsersById)
-  .post('/', sendEmailVerification, insertUsers)
   .post('/login', userLogin)
+  .post('/photo', uploadMulter.single('photo'), insertPhoto)
+  .patch('/photo/:idUser', authenticateToken, authorizationUser, uploadMulter.single('photo'), updatePhoto)
+  .post('/token', authorizationGeneral, newToken)
+  .get('/:idUser', authenticateToken, authorizationAdmin, getUsersById)
   .post('/logout', authenticateToken, userLogOut)
   .patch('/:idUser', authenticateToken, authorizationUser, updateUsers)
-  .post('/photo', uploadMulter.single('photo'),insertPhoto)
-  .post('/photo/:idUser', uploadMulter.single('photo'), updatePhoto)
   .delete('/:idUser', authenticateToken, authorizationAdmin, deleteUsers)
 
 module.exports = router

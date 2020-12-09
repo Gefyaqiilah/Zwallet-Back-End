@@ -12,12 +12,8 @@ function authorizationAdmin(req, res, next) {
       if (roleId === 1) {
         return next()
       } else {
-        responseHelpers.response(res, null, {
-          status: 'forbidden',
-          statusCode: 400
-        }, {
-          message: "Sorry, You don't have permission to access this endpoint"
-        })
+        const error = new createError(400, "Sorry, You don't have permission to access this endpoint")
+        return next(error)
       }
     })
     .catch(() => {

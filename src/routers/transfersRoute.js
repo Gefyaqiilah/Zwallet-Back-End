@@ -14,8 +14,8 @@ const {
 } = transfersController
 router
   .get('/', getTransfers)
-  .get('/search', getTransactionByNameAndType)
-  .get('/:idTransfer', getTransferById)
-  .post('/',authenticateToken, authorizationUser, insertTransfers)
-  .delete('/:idTransfer', deleteTransfers)
+  .get('/search', authenticateToken, authorizationUser, getTransactionByNameAndType)
+  .post('/', authenticateToken, authorizationUser, insertTransfers)
+  .delete('/:idTransfer', authenticateToken, authorizationUser, deleteTransfers)
+  .get('/:idTransfer', authenticateToken, authorizationAdmin, getTransferById)
 module.exports = router

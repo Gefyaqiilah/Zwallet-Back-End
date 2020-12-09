@@ -6,7 +6,7 @@ const transfersModel = require('../models/transfersModel')
 const responseHelpers = require('../helpers/responseHelpers')
 
 class Controller {
-  getTransfers(req, res,next) {
+  getTransfers(req, res, next) {
     const {
       page = 1, limit = 2, order = "DESC"
     } = req.query
@@ -46,7 +46,7 @@ class Controller {
       })
   }
 
-  insertTransfers(req, res,next) {
+  insertTransfers(req, res, next) {
     const {
       idSender,
       idReceiver,
@@ -64,9 +64,8 @@ class Controller {
     }
     transfersModel.insertTransfers(data)
       .then(() => {
-        responseHelpers.response(res, {
-          message: 'transfer successfully'
-        }, {
+        const results = { message: "transfer successfully" }
+        responseHelpers.response(res, results, {
           status: 'transfer succeed',
           statusCode: 200
         }, null)
@@ -132,7 +131,8 @@ class Controller {
   deleteTransfers(req, res, next) {
     const idTransfer = req.params.idTransfer
     transfersModel.deleteTransfers(idTransfer)
-      .then(results => {
+      .then(() => {
+        const results = { message: "Transfer has been successfully deleted" }
         responseHelpers.response(res, results, {
           status: 'succeed',
           statusCode: 200

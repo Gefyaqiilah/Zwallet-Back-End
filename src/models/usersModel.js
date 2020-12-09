@@ -35,12 +35,12 @@ class Models {
       })
     })
   }
-  insertPhoto(photo){
-    return new Promise((resolve,reject)=>{
-      connection.query('INSERT INTO post_image SET photo = ?',photo,(error,results)=>{
-        if(!error){
+  insertPhoto(photo) {
+    return new Promise((resolve, reject) => {
+      connection.query('INSERT INTO post_image SET photo = ?', photo, (error, results) => {
+        if (!error) {
           resolve(results)
-        }else{
+        } else {
           reject(error)
         }
       })
@@ -93,7 +93,7 @@ class Models {
   }
   userLogin(email) {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT id, email, firstName, lastName, phoneNumber, password from users WHERE email = ?', email, ((error, results) => {
+      connection.query('SELECT id, email, firstName, lastName, phoneNumber, password, balance from users WHERE email = ?', email, ((error, results) => {
         if (!error) {
           resolve(results)
         } else {
