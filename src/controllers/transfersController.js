@@ -69,14 +69,15 @@ class Controller {
     }
     transfersModel.insertTransfers(data)
       .then(() => {
+        
         const results = { message: "transfer successfully" }
         responseHelpers.response(res, results, {
           status: 'transfer succeed',
           statusCode: 200
         }, null)
       })
-      .catch(() => {
-        const error = new createError(500, `Looks like server having trouble`)
+      .catch(err => {
+        const error = new createError(500, err)
         return next(error)
       })
   }

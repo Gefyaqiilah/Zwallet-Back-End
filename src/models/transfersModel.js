@@ -29,9 +29,13 @@ class Models {
     return new Promise((resolve, reject) => {
       // get balance user sender
       connection.query('SELECT balance FROM users WHERE id = ?', data.idSender, (errorSender, resultsSender) => {
+        if(errorSender){
+          reject('Looks like server having trouble')
+        }
         if (resultsSender.length !== 0) {
-          const senderBalance = JSON.parse(JSON.stringify(resultsSender[0]))
-          if (senderBalance.balance - data.amount >= 0) {
+          const senderBalance = resultsSender[0].balance
+          console.log(senderBalance - data.amount)
+          if (senderBalance - data.amount > 0) {
             // get balance user receiver
             connection.query('SELECT balance FROM users WHERE id = ?', data.idReceiver, (errorReceiver, resultsReceiver) => {
               if (resultsReceiver.length !== 0) {
@@ -41,7 +45,7 @@ class Models {
                 connection.query('UPDATE users SET balance = ? WHERE id = ?', [amount, data.idReceiver], (errorUpdateBalance, resultsUpdateBalance) => {
                   if (!errorUpdateBalance) {
                     // update for reduce balance sender
-                    const reduceBalanceSender = parseInt(senderBalance.balance) - parseInt(data.amount)
+                    const reduceBalanceSender = parseInt(senderBalance) - parseInt(data.amount)
                     connection.query('UPDATE users SET balance = ? WHERE id = ?', [reduceBalanceSender, data.idSender], (errorReduceBalanceSender, resultsReduceBalanceSender) => {
                       if (!errorReduceBalanceSender) {
                         // add transfer transaction to table transfer
