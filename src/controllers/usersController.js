@@ -120,71 +120,35 @@ class Controllers {
           bcrypt.compare(password, userData.password, ((errorcrypt, resultscrypt) => {
             if (!errorcrypt) {
               if (resultscrypt) {
-                const userDataToken = {
-                  id: userData.id,
-                  firstName: userData.firstName,
-                  lastName: userData.lastName,
-                  email: userData.email,
-                  phoneNumber: userData.phoneNumber,
-                  phoneNumberSecond: userData.phoneNumberSecond,
-                  balance: userData.balance,
-                  photo: userData.photo
-                }
-                // function for generate token
-                const token = this.generateAccessToken(userDataToken)
-                const refreshToken = this.generateRefreshToken(userDataToken)
-                let tokenResponse = {
-                  accessToken: token,
-                  refreshToken
-                }
-                // get data login user from redis
-                client.get("dataLogin", function (err, reply) {
-                  if (reply) {
-                    const dataLogin = [...JSON.parse(reply)]
-
-                    // check whether the user has logged in before
-                    const checkLoggedin = dataLogin.find((x) => {
-                      return x.email === email
-                    })
-                    if (checkLoggedin) {
-                      tokenResponse = {
-                        accessToken: token,
-                        refreshToken: checkLoggedin.refreshToken
-                      }
-                      return responseHelpers.response(res, tokenResponse, {
-                        status: 'Login Successful',
-                        statusCode: 200
-                      }, null)
-                    }
-                    dataLogin.push({
-                      ...userDataToken,
-                      refreshToken: refreshToken
-                    })
-                    // set redis
-                    client.setex("dataLogin", 60 * 60, JSON.stringify(dataLogin));
-                    // send a response
-                    responseHelpers.response(res, tokenResponse, {
-                      status: 'Login Successful',
-                      statusCode: 200
-                    }, null)
-
-                  } else {
-                    const dataLogin = []
-                    dataLogin.push({
-                      ...userDataToken,
-                      refreshToken: refreshToken
-                    })
-                    client.setex("dataLogin", 60 * 60, JSON.stringify(dataLogin));
-                    // send a response
-                    responseHelpers.response(res, tokenResponse, {
-                      status: 'Login Successful',
-                      statusCode: 200
-                    }, null)
+                usersModel.checkEmailStatus(email)
+                .then(result=>{
+                if(result[0].emailStatus=== 1){
+                  const userDataToken = {
+                    id: userData.id,
+                    firstName: userData.firstName,
+                    lastName: userData.lastName,
+                    email: userData.email,
+                    phoneNumber: userData.phoneNumber,
+                    phoneNumberSecond: userData.phoneNumberSecond,
+                    balance: userData.balance,
+                    photo: userData.photo
                   }
-                });
-              } else {
-                const error = new createError(404, `Email or password you entered is incorrect.`)
+                  // function for generate token
+                  const token = this.generateAccessToken(userDataToken)
+                  const refreshToken = this.generateRefreshToken(userDataToken)
+                  let tokenResponse = {
+                    accessToken: token,
+                    refreshToken
+                  }
+                  return responseHelpers.response(res, tokenResponse, {
+                    status: 'Login Successful',
+                    statusCode: 200
+                  }, null)
+                }  
+                const error = new createError(400, 'email must be verified first, check the email we have sent')
                 return next(error)
+                })
+                .catch()
               }
             } else {
               const error = new createError(404, `Email or password you entered is incorrect.`)
@@ -228,7 +192,7 @@ class Controllers {
     return jwt.sign(
       userData,
       process.env.ACCESS_TOKEN, {
-      expiresIn: '24h'
+      expiresIn: '1m'
     })
   }
 
@@ -242,42 +206,34 @@ class Controllers {
       const error = new createError(500, `Forbidden: Token cannot be empty`)
       return next(error)
     }
+    const verifyRefreshToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN)
 
-    client.get("dataLogin", function (err, reply) {
-      if (!reply) {
-        const error = new createError(401, `Forbidden: required to log in first`)
-        return next(error)
-      }
-
-      const dataLogin = [...JSON.parse(reply)]
-
-      const checkRefreshToken = dataLogin.find((x) => {
-        return x.refreshToken === refreshToken
+    usersModel.getDataToken(verifyRefreshToken.email)
+      .then(results => {
+        const userData = results[0]
+        const userDataToken = {
+          id: userData.id,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          email: userData.email,
+          phoneNumber: userData.phoneNumber,
+          phoneNumberSecond: userData.phoneNumberSecond,
+          balance: userData.balance,
+          photo: userData.photo
+        } 
+        jwt.sign(userDataToken, process.env.ACCESS_TOKEN, {expiresIn: '1m'} ,  function (err, token) {
+          return responseHelpers.response(res, {
+            accessToken: token
+          }, {
+            status: 'Succeed',
+            statusCode: 200
+          }, null)
+        });
       })
-      if (!checkRefreshToken) {
-        const error = new createError(401, `Forbidden: you are not logged in`)
+      .catch(() => {
+        const error = new createError(500, `Looks like server having trouble`)
         return next(error)
-      }
-
-      const verifyRefreshToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN)
-
-      usersModel.getDataToken(verifyRefreshToken.email)
-        .then(results => {
-          const userData = JSON.stringify(results[0])
-          jwt.sign(userData, process.env.ACCESS_TOKEN, function (err, token) {
-            return responseHelpers.response(res, {
-              accessToken: token
-            }, {
-              status: 'Succeed',
-              statusCode: 200
-            }, null)
-          });
-        })
-        .catch(() => {
-          const error = new createError(500, `Looks like server having trouble`)
-          return next(error)
-        })
-    })
+      })
   }
 
   insertUsers(req, res, next) {

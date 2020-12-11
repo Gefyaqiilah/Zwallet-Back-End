@@ -90,9 +90,20 @@ class Models {
       }))
     })
   }
+  checkEmailStatus(email){
+    return new Promise((resolve,reject)=>{
+      connection.query('SELECT emailStatus FROM users WHERE email = ?',email,(error,results)=>{
+        if(!error){
+          resolve(results)
+        }else{
+          reject(error)
+        }
+      })
+    })
+  }
   getDataToken(email) {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT id,firstName, lastName,email,phoneNumber, photo, balance FROM users WHERE email = ?', email, (error, results) => {
+      connection.query('SELECT id, email, firstName, lastName, phoneNumber,phoneNumberSecond, password, balance, photo FROM users WHERE email = ?', email, (error, results) => {
         if (!error) {
           resolve(results)
         } else {
