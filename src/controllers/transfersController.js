@@ -75,7 +75,7 @@ class Controller {
         return next(errorMessage)
       }
       await transfersModel.insertTransfers(data)
-      const message = { message: "transfer successfully" }
+      const message = { message: "transfer successfully", idTransfer: idTransfer }
       responseHelpers.response(res, message, {
         status: 'transfer succeed',
         statusCode: 200

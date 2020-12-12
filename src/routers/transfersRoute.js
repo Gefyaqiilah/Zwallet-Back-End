@@ -17,5 +17,5 @@ router
   .get('/search', authenticateToken, authorizationUser, getTransactionByNameAndType)
   .post('/', authenticateToken, authorizationUser, insertTransfers)
   .delete('/:idTransfer', authenticateToken, authorizationUser, deleteTransfers)
-  .get('/:idTransfer', authenticateToken, authorizationAdmin, getTransferById)
+  .get('/:idTransfer', authenticateToken, authorizationUser, getTransferById)
 module.exports = router
