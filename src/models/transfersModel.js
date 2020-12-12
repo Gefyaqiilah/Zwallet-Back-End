@@ -12,7 +12,17 @@ class Models {
       })
     })
   }
-
+  getPinById(id){
+    return new Promise((resolve, reject)=>{
+      connection.query('SELECT pin FROM users WHERE id = ?', id, (error, results) => {
+        if(!error){
+          resolve(results)
+        }else{
+          reject(error)
+        }
+      })
+    })
+  }
   getTransferById(idTransfer) {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM transfers WHERE idTransfer = ? ', idTransfer, (error, results) => {

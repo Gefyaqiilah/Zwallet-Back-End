@@ -51,12 +51,13 @@ class Controller {
       })
   }
 
-  insertTransfers(req, res, next) {
+  async insertTransfers(req, res, next) {
     const {
       idSender,
       idReceiver,
       amount,
-      notes = ''
+      notes = '',
+      pin
     } = req.body
     const idTransfer = uuidv4()
     const data = {
@@ -67,19 +68,22 @@ class Controller {
       notes,
       transferDate: new Date()
     }
-    transfersModel.insertTransfers(data)
-      .then(() => {
-        
-        const results = { message: "transfer successfully" }
-        responseHelpers.response(res, results, {
-          status: 'transfer succeed',
-          statusCode: 200
-        }, null)
-      })
-      .catch(err => {
-        const error = new createError(500, err)
-        return next(error)
-      })
+    try{
+      const resultPin = await transfersModel.getPinById(idSender)
+      if(parseInt(resultPin[0].pin) !== pin){
+        const errorMessage = new createError(400, 'Sorry, Your PIN is wrong')
+        return next(errorMessage)
+      }
+      await transfersModel.insertTransfers(data)
+      const message = { message: "transfer successfully" }
+      responseHelpers.response(res, message, {
+        status: 'transfer succeed',
+        statusCode: 200
+      }, null)
+    } catch (error) {
+      const errorMessage = new createError(500, error)
+      return next(errorMessage)
+    }
   }
 
   getTransactionByNameAndType(req, res, next) {

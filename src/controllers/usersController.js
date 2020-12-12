@@ -131,7 +131,8 @@ class Controllers {
                     phoneNumber: userData.phoneNumber,
                     phoneNumberSecond: userData.phoneNumberSecond,
                     balance: userData.balance,
-                    photo: userData.photo
+                    photo: userData.photo,
+                    pin: userData.pin?"exists":"not exists"
                   }
                   // function for generate token
                   const token = this.generateAccessToken(userDataToken)
@@ -145,14 +146,15 @@ class Controllers {
                     statusCode: 200
                   }, null)
                 }  
-                const error = new createError(400, 'email must be verified first, check the email we have sent')
+                const error = new createError(401, 'email must be verified first, check the email we have sent')
                 return next(error)
                 })
                 .catch()
+              } else {
+                console.log('masuk error')
+                const error = new createError(404, `Email or password you entered is incorrect.`)
+                return next(error)      
               }
-            } else {
-              const error = new createError(404, `Email or password you entered is incorrect.`)
-              return next(error)
             }
           }))
         }

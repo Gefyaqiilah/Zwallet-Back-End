@@ -114,7 +114,7 @@ class Models {
   }
   userLogin(email) {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT id, email, firstName, lastName, phoneNumber,phoneNumberSecond, password, balance, photo from users WHERE email = ?', email, ((error, results) => {
+      connection.query('SELECT id, email, firstName, lastName, phoneNumber,phoneNumberSecond,pin, password, balance, photo from users WHERE email = ?', email, ((error, results) => {
         if (!error) {
           resolve(results)
         } else {
