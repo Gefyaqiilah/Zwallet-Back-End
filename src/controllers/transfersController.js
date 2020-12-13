@@ -36,7 +36,7 @@ class Controller {
     transfersModel.getTransferById(idTransfer)
       .then(results => {
         if (results.length === 0) {
-          const error = new createError(500, `Data Transfer User with ID :${idTransfer} not Found..`)
+          const error = new createError(400, `Data Transfer User not Found..`)
           return next(error)
         } else {
           responseHelpers.response(res, results, {
@@ -75,7 +75,8 @@ class Controller {
         return next(errorMessage)
       }
       await transfersModel.insertTransfers(data)
-      const message = { message: "transfer successfully", idTransfer: idTransfer }
+      const message = { message: "transfer successfully", idTransfer: idTransfer, idReceiver: idReceiver }
+      console.log(message)
       responseHelpers.response(res, message, {
         status: 'transfer succeed',
         statusCode: 200
@@ -91,7 +92,7 @@ class Controller {
       firstName,
       type = 'transfers',
       page = 1,
-      limit = '2',
+      limit = '4',
       order = "DESC"
     } = req.query
     const offset = page ? (parseInt(page) - 1) * parseInt(limit) : 0;
@@ -103,6 +104,7 @@ class Controller {
             const error = new createError(204, `Data not found`)
             return next(error)
           } else {
+            console.log(results)
             responseHelpers.response(res, results, {
               status: 'succeed',
               statusCode: 200

@@ -194,7 +194,7 @@ class Controllers {
     return jwt.sign(
       userData,
       process.env.ACCESS_TOKEN, {
-      expiresIn: '1m'
+      expiresIn: '24h'
     })
   }
 
