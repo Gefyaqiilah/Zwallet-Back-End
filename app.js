@@ -80,7 +80,7 @@ const server = http.createServer(app)
 // socket
 const io = require('socket.io')(server, {
   cors: {
-    origin: "http://localhost:8080",
+    origin: `${process.env.BASE_URL_FRONT_END}`,
     methods: ["GET"]
   }
 })
