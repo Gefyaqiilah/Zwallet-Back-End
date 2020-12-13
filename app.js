@@ -4,12 +4,17 @@ const app = express()
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const http = require('http')
+const MySQLEvents = require('@rodrigogs/mysql-events');
+const connection = require('./src/configs/db')
+
 // import router
 const usersRoute = require('./src/routers/usersRoute')
 const responseHelpers = require('./src/helpers/responseHelpers')
 const transfersRoute = require('./src/routers/transfersRoute')
 const topUpRoute = require('./src/routers/topUpRoute')
 const emailRoute = require('./src/routers/emailRoute')
+const { rejects } = require('assert')
 const PORT = process.env.PORT
 
 // CORS
@@ -40,4 +45,58 @@ app.use((err, req, res, next) => {
   responseHelpers.response(res, null, { status: err.status || 'Failed', statusCode: err.statusCode || 400 }, { message: err.message })
 })
 
-app.listen(PORT, () => console.log('Express server running on port : ' + PORT))
+app.all('/', function (q, p, next) {
+  p.header("Access-Control-Allow-Origin", "*");
+  p.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
+const program = async () => {
+  const instance = new MySQLEvents(connection, {
+    startAtEnd: true,
+    excludedSchemas: {
+      mysql: true,
+    },
+  });
+
+  await instance.start();
+
+  instance.addTrigger({
+    name: 'TEST',
+    expression: 'zwallet.users',
+    statement: MySQLEvents.STATEMENTS.ALL,
+    onEvent: (event) => { // You will receive the events here
+      console.log(event);
+    },
+  });
+  
+  instance.on(MySQLEvents.EVENTS.CONNECTION_ERROR, console.error);
+  instance.on(MySQLEvents.EVENTS.ZONGJI_ERROR, console.error);
+};
+
+
+// server
+const server = http.createServer(app)
+// socket
+const io = require('socket.io')(server, {
+  cors: {
+    origin: "http://localhost:8080",
+    methods: ["GET"]
+  }
+})
+// add listener
+io.on('connection', (socket) => {
+  console.log('user connected', socket.id)
+  socket.on('getUserData', (data) => {
+      connection.query('SELECT id, email, firstName, lastName, phoneNumber,phoneNumberSecond,pin, password, balance, photo FROM users where id = ?', data, (error, results) =>{
+        if(!error){
+          io.emit('getUserData', results)
+        }else{
+          io.emit('getUserData', error)
+        }
+      })
+  })
+})
+// seerver running
+server.listen(PORT, () => console.log('Express server running on port : ' + PORT))
+// app.listen(PORT, () => console.log('Express server running on port : ' + PORT))

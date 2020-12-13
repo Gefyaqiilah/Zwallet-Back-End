@@ -151,7 +151,6 @@ class Controllers {
                 })
                 .catch()
               } else {
-                console.log('masuk error')
                 const error = new createError(404, `Email or password you entered is incorrect.`)
                 return next(error)      
               }
@@ -422,7 +421,6 @@ class Controllers {
       ...req.body,
       updatedAt: new Date()
     }
-    console.log(data)
     usersModel.updateUsers(idUser, data)
       .then(() => {
         const results = { message: "user data has been successfully updated" }

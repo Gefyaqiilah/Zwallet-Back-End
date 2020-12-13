@@ -39,7 +39,6 @@ class Models {
 
   insertTopUp(data) {
     return new Promise((resolve, reject) => {
-      console.log(data.idReceiver)
       connection.query('SELECT balance FROM users WHERE id = ?', data.idReceiver, (error, results) => {
         if (!error) {
           const balanceAmount = parseInt(JSON.parse(JSON.stringify(results[0].balance))) + parseInt(data.amount)

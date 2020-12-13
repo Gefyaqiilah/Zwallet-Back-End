@@ -44,7 +44,6 @@ class Models {
         }
         if (resultsSender.length !== 0) {
           const senderBalance = resultsSender[0].balance
-          console.log(senderBalance - data.amount)
           if (senderBalance - data.amount > 0) {
             // get balance user receiver
             connection.query('SELECT balance FROM users WHERE id = ?', data.idReceiver, (errorReceiver, resultsReceiver) => {
