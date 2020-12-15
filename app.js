@@ -51,30 +51,6 @@ app.all('/', function (q, p, next) {
   next();
 });
 
-const program = async () => {
-  const instance = new MySQLEvents(connection, {
-    startAtEnd: true,
-    excludedSchemas: {
-      mysql: true,
-    },
-  });
-
-  await instance.start();
-
-  instance.addTrigger({
-    name: 'TEST',
-    expression: 'zwallet.users',
-    statement: MySQLEvents.STATEMENTS.ALL,
-    onEvent: (event) => { // You will receive the events here
-      console.log(event);
-    },
-  });
-  
-  instance.on(MySQLEvents.EVENTS.CONNECTION_ERROR, console.error);
-  instance.on(MySQLEvents.EVENTS.ZONGJI_ERROR, console.error);
-};
-
-
 // server
 const server = http.createServer(app)
 // socket
