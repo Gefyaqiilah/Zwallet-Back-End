@@ -330,6 +330,38 @@ class Controllers {
       })
   }
 
+  async checkPin (req, res, next) {
+    const pin = req.body.pin
+    const option = req.query.option
+    try {
+      const result = await usersModel.checkPin(req.user.id, pin, option)
+      if (option === 'checkexistpin') {
+        let sendResult = ''
+        if (result[0].pin) {
+          sendResult = 'exist'
+        } else {
+          sendResult = 'not exist'
+        }
+        responseHelpers.response(res, sendResult, {
+          status: 'succeed',
+          statusCode: 200
+        }, null)
+      } else {
+        if (result.length > 0) {
+          responseHelpers.response(res, 'correct', {
+            status: 'succeed',
+            statusCode: 200
+          }, null)
+        } else {
+          const error = new createError(404, 'Incorrect')
+          return next(error)
+        }
+      }
+    } catch (error) {
+      res.json(error)
+    }
+  }
+
   updatePhoneNumber(req, res, next) {
     const {
       phoneNumber = null

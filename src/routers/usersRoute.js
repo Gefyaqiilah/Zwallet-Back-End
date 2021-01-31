@@ -22,13 +22,15 @@ const {
   newToken,
   userLogOut,
   insertPhoto,
-  sendEmailVerification
+  sendEmailVerification,
+  checkPin
 } = usersController
 
 router
   .get('/', getUsers)
   .post('/register', sendEmailVerification, insertUsers)
   .get('/search', getUsersByFirstName)
+  .post('/check-pin', authenticateToken, checkPin)
   .post('/login', userLogin)
   .post('/photo', uploadMulter.single('photo'), insertPhoto)
   .patch('/photo/:idUser', authenticateToken, authorizationUser, uploadMulter.single('photo'), updatePhoto)

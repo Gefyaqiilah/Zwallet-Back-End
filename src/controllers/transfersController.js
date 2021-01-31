@@ -4,6 +4,7 @@ const {
 const { pagination } = require('../helpers/pagination')
 const createError = require('http-errors')
 const transfersModel = require('../models/transfersModel')
+const usersModel = require('../models/usersModel')
 const responseHelpers = require('../helpers/responseHelpers')
 
 class Controller {
@@ -137,11 +138,18 @@ class Controller {
       console.log('req.user :>> ', req.user);
       try {
         const transactions = await transfersModel.getAllTransactionById(req.user.id, limit, offset, ordered)
-        const queryPagination = `SELECT COUNT (*) as totalData FROM transfers WHERE idSender IN ('${req.user.id}') OR idReceiver IN ('${req.user.id}') ORDER BY transferDate ${ordered} LIMIT ${offset},${limit}`
-        console.log('transactions :>> ', transactions);
+        const queryPagination = `SELECT COUNT (*) as totalData FROM transfers WHERE idSender IN ('${req.user.id}') OR idReceiver IN ('${req.user.id}')`
+        const getInformation = await Promise.all(transactions.map(async(el)=>{
+          const getData = await usersModel.getUsersById(el.idSender)
+          console.log('getData :>> ', getData);
+          return {
+            ...el, userSender: getData[0]
+          }
+        }))
+        console.log('getInformation :>> ', getInformation);
         const paginations = await pagination(limit, page, `transfers/search`,'', queryPagination, `type=${type}`)
         const sendResults = {
-          transactions: transactions,
+          transactions: getInformation,
           pagination: paginations
         }
         responseHelpers.response(res, sendResults, {

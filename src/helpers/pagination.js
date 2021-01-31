@@ -3,6 +3,7 @@ const { pagination } = require('../models/global')
 exports.pagination = async (limit, page, endpoint, table, option, queryParams) => {
   let totalData
   if (option) {
+    console.log('option :>> ', option);
     const users = await pagination(option)
     console.log('users :>> ', users);
     totalData = users[0].totalData

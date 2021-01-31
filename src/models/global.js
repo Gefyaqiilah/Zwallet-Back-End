@@ -7,7 +7,6 @@ const global = {
       connection.query(query, (err, result) => {
         if (!err) {
           resolve(result)
-          console.log('err :>> ', err);
         } else {
           reject(err)
         }

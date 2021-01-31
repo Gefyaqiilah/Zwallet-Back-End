@@ -22,6 +22,29 @@ class Models {
       })
     })
   }
+
+  checkPin (userId, pin, option) {
+    return new Promise((resolve, reject) => {
+      if (option === 'checkexistpin') {
+        connection.query(`SELECT pin FROM users WHERE users.id = ?`, [userId], (error, results) => {
+          if (!error) {
+            resolve(results)
+          } else {
+            reject(error)
+          }
+        })
+      } else {
+        connection.query(`SELECT pin FROM users WHERE users.id = ? & pin = ?`, [userId, pin], (error, results) => {
+          if (!error) {
+            resolve(results)
+          } else {
+            reject(error)
+          }
+        })
+      }
+    });
+  }
+
   getUsersById(id, type) {
     return new Promise((resolve, reject) => {
       if (type === 'all') {
