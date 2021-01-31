@@ -30,6 +30,11 @@ repo ini berisi project zwallet back-end, yang mana di Zwallet back-end ini tela
     Di endpoint ini server menerima beberapa method request, Diantaranya :<br>
     <b>GET, GET BY ID, GET BY FIRSTNAME (user) & LIMIT(Default=10), INSERT, DELETE.</b>
 
-## Request Example
+## DEMO PROJECT
+https://zwallet-gefy.fwdev.online
 
+## Repo Zwallet Front End
+https://github.com/Gefyaqiilah/Zwallet-Front-End
+
+## Request Example 
 https://explore.postman.com/templates/14484/zwallet-back-end
