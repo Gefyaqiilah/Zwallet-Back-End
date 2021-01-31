@@ -118,6 +118,18 @@ class Models {
       })
     })
   }
+
+  getAllTransactionById (userId,limit, offset, ordered) {
+    return new Promise((resolve, reject) => {
+      connection.query(`SELECT * FROM transfers WHERE idSender IN ('${userId}') OR idReceiver IN ('${userId}') ORDER BY transferDate ${ordered} LIMIT ${offset},${limit}`, (error, result) => {
+        if (!error) {
+          resolve(result)
+        } else {
+          reject(error)
+        }
+      })
+    });
+  }
 }
 
 const Transfers = new Models()

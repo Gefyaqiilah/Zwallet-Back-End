@@ -86,7 +86,7 @@ class Controller {
     }
   }
 
-  getTransactionByNameAndType(req, res, next) {
+  async getTransactionByNameAndType(req, res, next) {
     const {
       firstName,
       type = 'transfers',
@@ -103,6 +103,7 @@ class Controller {
             const error = new createError(204, `Data not found`)
             return next(error)
           } else {
+            console.log('results :>> ', results);
             responseHelpers.response(res, results, {
               status: 'succeed',
               statusCode: 200
@@ -132,9 +133,21 @@ class Controller {
           const error = new createError(500, `Looks like server having trouble`)
           return next(error)
         })
-    } else {
-      const error = new createError(500, `data type ${type} not found ..`)
-      return next(error)
+    } else if (type === 'all'){
+      console.log('req.user :>> ', req.user);
+      try {
+        const transactions = await transfersModel.getAllTransactionById(req.user.id, limit, offset, ordered)
+        const queryPagination = `SELECT COUNT (*) as totalData FROM transfers WHERE idSender IN ('${req.user.id}') OR idReceiver IN ('${req.user.id}') ORDER BY transferDate ${ordered} LIMIT ${offset},${limit}`
+        console.log('transactions :>> ', transactions);
+        const paginations = await pagination(limit, page, `transfers/search`,'', queryPagination, `type=${type}`)
+        const sendResults = {
+          transactions: transactions,
+          pagination: paginations
+        }
+        res.json(sendResults)
+      } catch (error) {
+        console.log('error :>> ', error);
+      }
     }
   }
 

@@ -56,8 +56,7 @@ const server = http.createServer(app)
 // socket
 const io = require('socket.io')(server, {
   cors: {
-    origin: `${process.env.BASE_URL_FRONT_END}`,
-    methods: ["GET"]
+    origin: `*`
   }
 })
 // add listener
@@ -66,9 +65,9 @@ io.on('connection', (socket) => {
   socket.on('getUserData', (data) => {
       connection.query('SELECT id, email, firstName, lastName, phoneNumber,phoneNumberSecond,pin, password, balance, photo FROM users where id = ?', data, (error, results) =>{
         if(!error){
-          io.emit('getUserData', results)
+          socket.emit('getUserData', results)
         }else{
-          io.emit('getUserData', error)
+          socket.emit('getUserData', error)
         }
       })
   })
