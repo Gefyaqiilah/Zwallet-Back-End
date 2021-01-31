@@ -144,7 +144,10 @@ class Controller {
           transactions: transactions,
           pagination: paginations
         }
-        res.json(sendResults)
+        responseHelpers.response(res, sendResults, {
+          status: 'succeed',
+          statusCode: 200
+        }, null)
       } catch (error) {
         console.log('error :>> ', error);
       }

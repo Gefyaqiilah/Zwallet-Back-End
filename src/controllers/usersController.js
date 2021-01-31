@@ -49,17 +49,30 @@ class Controllers {
 
   getUsersById(req, res, next) {
     const idUser = req.params.idUser
-
-    usersModel.getUsersById(idUser)
+    const type = req.query.type
+    usersModel.getUsersById(idUser, type)
       .then(results => {
         if (results.length === 0) {
           const error = new createError(404, `User not Found..`)
           next(error)
         } else {
-          responseHelpers.response(res, results, {
-            status: 'succeed',
-            statusCode: 200
-          }, null)
+          if (type === 'all') {
+            const sendResults = results[0]
+            delete sendResults.createdAt
+            delete sendResults.updatedAt
+            delete sendResults.password
+            delete sendResults.roleId
+            delete sendResults.pin
+            responseHelpers.response(res, sendResults, {
+              status: 'succeed',
+              statusCode: 200
+            }, null)
+          } else {
+            responseHelpers.response(res, results, {
+              status: 'succeed',
+              statusCode: 200
+            }, null)
+          }
         }
       })
       .catch(() => {

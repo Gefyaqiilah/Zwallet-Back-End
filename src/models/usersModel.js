@@ -22,15 +22,25 @@ class Models {
       })
     })
   }
-  getUsersById(id) {
+  getUsersById(id, type) {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT id, firstName, lastName, email, phoneNumber, photo FROM users WHERE id = ?', id, (error, results) => {
-        if (!error) {
-          resolve(results)
-        } else {
-          reject(error)
-        }
-      })
+      if (type === 'all') {
+        connection.query('SELECT * FROM users WHERE id = ?', id, (error, results) => {
+          if (!error) {
+            resolve(results)
+          } else {
+            reject(error)
+          }
+        })
+      } else {
+        connection.query('SELECT id, firstName, lastName, email, phoneNumber, photo FROM users WHERE id = ?', id, (error, results) => {
+          if (!error) {
+            resolve(results)
+          } else {
+            reject(error)
+          }
+        })
+      }
     })
   }
 
