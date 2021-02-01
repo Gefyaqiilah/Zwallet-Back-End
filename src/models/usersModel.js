@@ -23,6 +23,19 @@ class Models {
     })
   }
 
+  updatePin (userId, pin) {
+    return new Promise((resolve, reject) => {
+      connection.query(`UPDATE users SET pin = ? WHERE id = ?`, [pin, userId], (error, results) => {
+        if (!error) {
+          resolve(results)
+        } else {
+          console.log('error :>> ', error);
+          reject(error)
+        }
+      })
+    });
+  }
+  
   checkPin (userId, pin, option) {
     return new Promise((resolve, reject) => {
       if (option === 'checkexistpin') {

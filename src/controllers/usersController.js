@@ -451,6 +451,22 @@ class Controllers {
       })
 
   }
+  async updatePin (req, res, next) {
+    const pin = req.body.pin
+    try {
+      console.log('masuk')
+      const result = await usersModel.updatePin(req.user.id, pin)
+      responseHelpers.response(res, 'success', {
+        status: 'succeed',
+        statusCode: 200
+      }, null)
+    } catch (err) {
+      console.log('err', err)
+      const error = new createError(500, `Looks like server having trouble`)
+      return next(error)
+    }
+  }
+
   updateUsers(req, res, next) {
     const idUser = req.params.idUser
     if (Object.keys(req.body).length === 0) {
