@@ -38,7 +38,6 @@ router
   .patch('/photo/:idUser', authenticateToken, authorizationUser, uploadMulter.single('photo'), updatePhoto)
   .post('/token', authorizationGeneral, newToken)
   .get('/:idUser', authenticateToken, authorizationUser, getUsersById)
-  .post('/logout', authenticateToken, userLogOut)
   .patch('/:idUser', authenticateToken, authorizationUser, updateUsers)
   .delete('/:idUser', authenticateToken, authorizationAdmin, deleteUsers)
 

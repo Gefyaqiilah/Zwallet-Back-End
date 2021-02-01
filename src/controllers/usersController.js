@@ -4,8 +4,6 @@ const {
 } = require('uuid')
 const jwt = require('jsonwebtoken')
 const createError = require('http-errors')
-const redis = require("redis");
-const client = redis.createClient();
 const responseHelpers = require('../helpers/responseHelpers')
 const usersModel = require('../models/usersModel');
 const fs = require('fs')
@@ -19,7 +17,6 @@ class Controllers {
     this.generateAccessToken = this.generateAccessToken.bind(this)
     this.generateRefreshToken = this.generateRefreshToken.bind(this)
     this.newToken = this.newToken.bind(this)
-    this.userLogOut = this.userLogOut.bind(this)
   }
 
   async getUsers(req, res, next) {
@@ -89,21 +86,13 @@ class Controllers {
       const error = new createError(404, `Firstname cannot empty`)
       return next(error)
     }
-    // set redis
-    client.get(`searchUser=${firstName}`, function (err, reply) {
-      if (err) {
-        responseHelpers.response(res, JSON.parse(reply), {
-          status: 'succeed',
-          statusCode: 200
-        }, null)
-      }
+
       usersModel.getUsersByFirstName(firstName)
         .then(results => {
           if (results.length === 0) {
             const error = new createError(404, `User not Found..`)
             return next(error)
           } else {
-            client.setex(`searchUser=${firstName}`, 60 * 60, JSON.stringify(results));
             responseHelpers.response(res, results, {
               status: 'succeed',
               statusCode: 200
@@ -114,7 +103,6 @@ class Controllers {
           const error = new createError(500, `Looks like server having trouble`)
           return next(error)
         })
-    })
   }
 
   userLogin(req, res, next) {
@@ -175,32 +163,6 @@ class Controllers {
         const error = new createError(500, `Looks like server having trouble`)
         return next(error)
       })
-  }
-  userLogOut(req, res, next) {
-    client.get("dataLogin", function (err, reply) {
-      if (!reply) {
-        const error = new createError(401, 'Cannot save data login on redis')
-        return next(error)
-      }
-
-      const dataLogin = [...JSON.parse(reply)]
-
-      const checkDataLogin = dataLogin.find((user) => user.email === req.user.email)
-      if (!checkDataLogin) {
-        const error = new createError(401, `Forbidden: required to log in first`)
-        return next(error)
-      }
-
-      const filter = dataLogin.filter((user) => user.email !== req.user.email)
-      client.setex("dataLogin", 60 * 60, JSON.stringify(filter));
-
-      responseHelpers.response(res, {
-        message: `${req.user.firstName} has logged out`
-      }, {
-        status: 'succeed',
-        statusCode: 200
-      }, null)
-    })
   }
   generateAccessToken(userData) {
     return jwt.sign(
@@ -299,12 +261,14 @@ class Controllers {
                   statusCode: 200
                 }, null)
               })
-              .catch(() => {
+              .catch((err) => {
+                console.log('err', err)
                 const error = new createError(500, `Looks like server having trouble`)
                 return next(error)
               })
           })
-          .catch(() => {
+          .catch((err) => {
+            console.log('err', err)
             const error = new createError(500, `Looks like server having trouble`)
             return next(error)
           })
@@ -324,7 +288,8 @@ class Controllers {
       .then(() => {
         return next()
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log('err', err)
         const error = new createError(500, 'Looks like server having trouble..')
         return next(error)
       })
@@ -333,6 +298,8 @@ class Controllers {
   async checkPin (req, res, next) {
     const pin = req.body.pin
     const option = req.query.option
+    console.log('pin', typeof pin)
+    console.log('req.user.id', req.user.id)
     try {
       const result = await usersModel.checkPin(req.user.id, pin, option)
       if (option === 'checkexistpin') {

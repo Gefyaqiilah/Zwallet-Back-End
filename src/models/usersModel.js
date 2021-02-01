@@ -47,7 +47,7 @@ class Models {
           }
         })
       } else {
-        connection.query(`SELECT pin FROM users WHERE users.id = ? & pin = ?`, [userId, pin], (error, results) => {
+        connection.query(`SELECT pin FROM users WHERE users.id = ? AND pin = ?`, [userId, pin], (error, results) => {
           if (!error) {
             resolve(results)
           } else {
