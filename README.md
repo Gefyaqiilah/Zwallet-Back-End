@@ -1,7 +1,5 @@
 <p align="center">
 <img src="https://img.shields.io/github/repo-size/Gefyaqiilah/Zwallet-Back-End?color=%20%236379f4&label=Repo%20SIZE&logo=%20%236379f4&logoColor=%20%236379f4&style=for-the-badge">
- <a href="https://expressjs.com/"><img src="https://img.shields.io/badge/Express-4.17.1-green?style=for-the-badge"></a>
- <a href="https://nodejs.org/dist/latest-v14.x/docs/api/"><img src="https://img.shields.io/badge/NodeJs-v14-lightgreen?style=for-the-badge"></a>
    <a href="https://linkedin.com/in/gefyaqiilahaqshal"><img src="https://img.shields.io/badge/LinkedIn-v4-blue?style=for-the-badge&logo=linkedin"></a>
 </p>
 
@@ -26,9 +24,8 @@ Express.js is a web application framework for Node.js.
   </p>
 
 ## Built With
-[![Express.js](https://img.shields.io/badge/Express-4.17.1-brightgreen)](https://expressjs.com/en/starter/installing.html)
-[![Node.js](https://img.shields.io/badge/Node%20Js-14.15.4-orange)](https://nodejs.org/)
-[![Socket.io](https://img.shields.io/badge/Socket.io-3.1.0-blue)](https://www.npmjs.com/package/socket.io)
+[![Express.js](https://img.shields.io/badge/Express-4.17.1-green?style=for-the-badge)](https://expressjs.com/en/starter/installing.html)
+[![Node.js](https://img.shields.io/badge/NodeJs-v14-lightgreen?style=for-the-badge)](https://nodejs.org/)
 
 ## Requirements
 1. <a href="https://nodejs.org/en/download/">Node Js</a>
