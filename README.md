@@ -63,7 +63,7 @@ EMAIL_PASSWORD = [YOUR_EMAIL_PASSWORD]
 ```
 
 ## API Request Example 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/2decdaacaa9676a0dc3a)
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/f133c7f07e3034119288)
 ## Related Project
 
 - [Zwallet-Frontend](https://github.com/Gefyaqiilah/Zwallet-Front-End)
