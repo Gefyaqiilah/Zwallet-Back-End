@@ -10,10 +10,10 @@
     <img src="./screenshots/logo.png"  width="200px" alt="Logo" width="80">
   </a>
 
-  <h3 align="center">Zwallet App</h3>
+  <h3 align="center">Zwallet Back-End</h3>
 
   <p align="center">
-    LonChat-Backend is a backend for LonChat application. Built with NodeJs using the ExpressJs Framework.
+    Zwallet-Backend is a backend for Zwallet application. Built with NodeJs using the ExpressJs Framework.
 Express.js is a web application framework for Node.js. [More about Express](https://en.wikipedia.org/wiki/Express.js)
     <br />
     <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End"><strong>Explore the docs »</strong></a>
