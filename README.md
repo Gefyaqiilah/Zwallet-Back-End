@@ -11,12 +11,11 @@
   </a>
 
   <h3 align="center">Zwallet Back-End</h3>
-
   <p align="center">
     Zwallet-Backend is a backend for Zwallet application. Built with NodeJs using the ExpressJs Framework.
-Express.js is a web application framework for Node.js. [More about Express](https://en.wikipedia.org/wiki/Express.js)
+Express.js is a web application framework for Node.js.
     <br />
-    <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End"><strong>Explore the docs »</strong></a>
+    <a href="https://expressjs.com/"><strong>More about Express »</strong></a>
     <br />
     <br />
     <a href="https://zwallet-gefy.netlify.app">View Demo</a>
@@ -35,7 +34,6 @@ Express.js is a web application framework for Node.js. [More about Express](http
 1. <a href="https://nodejs.org/en/download/">Node Js</a>
 2. <a href="https://www.getpostman.com/">Postman</a>
 3. [Xampp](https://www.apachefriends.org/download.html)
-4. [Socket.io](https://www.npmjs.com/package/socket.io)
 
 ## How to run the app ?
 1. Open app's directory in CMD or Terminal
