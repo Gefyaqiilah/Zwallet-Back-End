@@ -1,8 +1,8 @@
 <p align="center">
-<img src="https://img.shields.io/github/repo-size/Gefyaqiilah/Zwallet-Front-End?color=%20%236379f4&label=Repo%20SIZE&logo=%20%236379f4&logoColor=%20%236379f4&style=for-the-badge">
- <img src="https://img.shields.io/badge/Vue-v2-green?style=for-the-badge">
-  <img src="https://img.shields.io/badge/Bootstrap-v4-lightgreen?style=for-the-badge">
-   <img src="https://img.shields.io/badge/Bootstrap-v4-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/gefyaqiilahaqshal">
+<img src="https://img.shields.io/github/repo-size/Gefyaqiilah/Zwallet-Back-End?color=%20%236379f4&label=Repo%20SIZE&logo=%20%236379f4&logoColor=%20%236379f4&style=for-the-badge">
+ <a href="https://expressjs.com/"><img src="https://img.shields.io/badge/Express-4.17.1-green?style=for-the-badge"></a>
+ <a href="https://nodejs.org/dist/latest-v14.x/docs/api/"><img src="https://img.shields.io/badge/NodeJs-v14-lightgreen?style=for-the-badge"></a>
+   <a href="https://linkedin.com/in/gefyaqiilahaqshal"><img src="https://img.shields.io/badge/LinkedIn-v4-blue?style=for-the-badge&logo=linkedin"></a>
 </p>
 
 <p align="center">
