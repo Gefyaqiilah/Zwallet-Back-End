@@ -26,9 +26,6 @@ Express.js is a web application framework for Node.js. [More about Express](http
     <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End">Request Feature</a>
   </p>
 
-
-Zwallet-Backend is a backend for Zwallet application. Built with NodeJs using the ExpressJs Framework.
-Express.js is a web application framework for Node.js.
 ## Built With
 [![Express.js](https://img.shields.io/badge/Express-4.17.1-brightgreen)](https://expressjs.com/en/starter/installing.html)
 [![Node.js](https://img.shields.io/badge/Node%20Js-14.15.4-orange)](https://nodejs.org/)
