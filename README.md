@@ -4,9 +4,8 @@
   </a>
 
   <p align="center">
-    **Zwallet-Backend is a backend for Zwallet application. Built with NodeJs using the ExpressJs Framework.
-Express.js is a web application framework for Node.js.**
-    <br />
+    <b>Zwallet-Backend is a backend for Zwallet application. Built with NodeJs using the ExpressJs Framework.
+      Express.js is a web application framework for Node.js.</b>
     <br />
     <a href="https://zwallet-gefy.netlify.app">View Demo</a>
     ·
