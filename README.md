@@ -1,14 +1,9 @@
-<p align="center">
-<img src="https://img.shields.io/github/repo-size/Gefyaqiilah/Zwallet-Back-End?color=%20%236379f4&label=Repo%20SIZE&logo=%20%236379f4&logoColor=%20%236379f4&style=for-the-badge">
-   <a href="https://linkedin.com/in/gefyaqiilahaqshal"><img src="https://img.shields.io/badge/LinkedIn-gefy-blue?style=for-the-badge&logo=linkedin"></a>
-</p>
-
+  <h1 align="center">Zwallet Back-End</h1>
 <p align="center">
   <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End">
     <img src="./screenshots/logo.png"  width="200px" alt="Logo" width="80">
   </a>
 
-  <h3 align="center">Zwallet Back-End</h3>
   <p align="center">
     Zwallet-Backend is a backend for Zwallet application. Built with NodeJs using the ExpressJs Framework.
 Express.js is a web application framework for Node.js.
