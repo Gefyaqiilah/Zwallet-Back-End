@@ -4,7 +4,7 @@
   </a>
 
   <p align="center">
-   Zwallet-Backend for Zwallet Back-End application. Built with NodeJs using the ExpressJs Framework.
+   Zwallet-Backend for Zwallet application. Built with NodeJs using the ExpressJs Framework.
       Express.js is a web application framework for Node.js.
     <br />
   <br/>
