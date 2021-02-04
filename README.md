@@ -1,12 +1,13 @@
 <p align="center">
   <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End">
-    <img src="./screenshots/logo.png"  width="200px" alt="Logo" width="80">
+    <img src="./screenshots/logo.png"  width="250px" alt="Logo" width="80">
   </a>
 
   <p align="center">
-    <b>Zwallet-Backend is a backend for Zwallet application. Built with NodeJs using the ExpressJs Framework.
-      Express.js is a web application framework for Node.js.</b>
+   Zwallet-Backend for Zwallet Back-End application. Built with NodeJs using the ExpressJs Framework.
+      Express.js is a web application framework for Node.js.
     <br />
+  <br/>
     <a href="https://zwallet-gefy.netlify.app">View Demo</a>
     ·
     <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End">Report Bug</a>
