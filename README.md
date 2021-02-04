@@ -1,4 +1,4 @@
-  <h1 align="center">Zwallet Back-End</h1>
+  <h1 align="center">Zwallet</h1>
 <p align="center">
   <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End">
     <img src="./screenshots/logo.png"  width="200px" alt="Logo" width="80">
