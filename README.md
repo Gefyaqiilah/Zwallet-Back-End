@@ -18,8 +18,8 @@ Express.js is a web application framework for Node.js.
   </p>
 
 ## Built With
-[![Express.js](https://img.shields.io/badge/Express-4.17.1-green?style=for-the-badge)](https://expressjs.com/en/starter/installing.html)
-[![Node.js](https://img.shields.io/badge/NodeJs-v14-lightgreen?style=for-the-badge)](https://nodejs.org/)
+[![Express.js](https://img.shields.io/badge/Express-4.17.1-green?style=flat)](https://expressjs.com/en/starter/installing.html)
+[![Node.js](https://img.shields.io/badge/NodeJs-v14-lightgreen?style=flat)](https://nodejs.org/)
 
 ## Requirements
 1. <a href="https://nodejs.org/en/download/">Node Js</a>
